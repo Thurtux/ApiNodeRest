@@ -8,6 +8,7 @@ class UseController {
         const users = await User.find();
         return response.json(users);
     }
+    
     catch (error) {
         return response.status(500).send({
             error: "search not performed",
@@ -45,8 +46,32 @@ class UseController {
             })
          }
     }
-}
 
+    async delete(request: Request, response: Response) {
+        const { id } = request.body;
+        try {
+            const user = await User.findById(id);
+            if (!user) {
+                return response.status(400).json({
+                    error: "User does not exist"
+                });
+            }
+    
+            await User.deleteOne({id }); // Use _id for MongoDB
+    
+            return response.json({
+                message: "User deleted successfully"
+            });
+        } catch (error) {
+            return response.status(500).json({
+                error: "Deletion error",
+                message: error
+            });
+        }
+    }
+    
+    
+}
 
 
 export default new UseController();
