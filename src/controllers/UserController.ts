@@ -51,13 +51,13 @@ class UseController {
         const { id } = request.body;
         try {
             const user = await User.findById(id);
-            if (!user) {
+            if (user!) {
                 return response.status(400).json({
                     error: "User does not exist"
                 });
             }
     
-            await User.deleteOne({id }); // Use _id for MongoDB
+            await User.deleteOne({ id }); 
     
             return response.json({
                 message: "User deleted successfully"
