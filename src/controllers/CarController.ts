@@ -74,6 +74,30 @@ class CarController {
             });
         }
     }
+
+
+    async update(request: Request, response: Response) {
+        const { id, mark, model, plate, releaseDate, price, color, description} = request.body;
+        try {
+            const cars = await Car.findById(id);
+            if (cars!) {
+                return response.status(400).json({
+                    error: "Car does not exist"
+                });
+            }
+    
+            await Car.updateMany({mark, model, plate, releaseDate, price, color, description}); 
+    
+            return response.json({
+                message: "Car update successfully"
+            });
+        } catch (error) {
+            return response.status(500).json({
+                error: "update error",
+                message: error
+            });
+        }
+    }
     
     
 }
