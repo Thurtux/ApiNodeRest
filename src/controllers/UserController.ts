@@ -47,21 +47,23 @@ class UseController {
          }
     }
 
+
     async delete(request: Request, response: Response) {
-        const { id } = request.body;
+        const { id, email } = request.body;
         try {
-            const user = await User.findById(id);
+            const user = await User.findOne(email);
             if (user!) {
                 return response.status(400).json({
                     error: "User does not exist"
                 });
             }
-    
+            else {
             await User.deleteOne({ id }); 
     
             return response.json({
                 message: "User deleted successfully"
             });
+        }
         } catch (error) {
             return response.status(500).json({
                 error: "Deletion error",
