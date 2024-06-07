@@ -15,11 +15,12 @@ class CarController {
             message: error
         })
      }
-
     }
 
+
+
     async create(request: Request, response:Response) {
-            const {mark, model, plate, releaseDate, price, color, description} = request.body;
+            const {mark, model, plate, releaseDate, price, color, description, image} = request.body;
         try {
             const CarsExist = await Car.findOne({ plate });
 
@@ -38,7 +39,7 @@ class CarController {
                 price,
                 color,
                 description,
-
+                image
             });
             return response.json(user);
 
@@ -56,7 +57,7 @@ class CarController {
         const { id } = request.body;
         try {
             const cars = await Car.findById(id);
-            if (cars!) {
+            if (!cars) {
                 return response.status(400).json({
                     error: "Car does not exist"
                 });
@@ -77,7 +78,7 @@ class CarController {
 
 
     async update(request: Request, response: Response) {
-        const { id, mark, model, plate, releaseDate, price, color, description} = request.body;
+        const { id, mark, model, plate, releaseDate, price, color, description, image} = request.body;
         try {
             const cars = await Car.findById(id);
             if (cars!) {
@@ -86,7 +87,7 @@ class CarController {
                 });
             }
     
-            await Car.updateMany({mark, model, plate, releaseDate, price, color, description}); 
+            await Car.updateMany({mark, model, plate, releaseDate, price, color, description, image}); 
     
             return response.json({
                 message: "Car update successfully"
