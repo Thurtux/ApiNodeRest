@@ -1,6 +1,7 @@
 import { Router } from "express";
 import UserController from "./controllers/UserController"
 import CarController from "./controllers/CarController";
+import router from "./auth/UserRegister";
 
 const routes = Router();
 
@@ -17,6 +18,10 @@ routes.get("/cars", CarController.find);
 routes.post("/car", CarController.create);
 routes.put("/car", CarController.update)
 export default routes;
+
+
+routes.use('/api/auth', router);
+
 
 
 
