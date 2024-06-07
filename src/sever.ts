@@ -1,9 +1,12 @@
 import express from "express";
 import mongoose from "mongoose";
 import routes from "./routes";
+import cors from 'cors';
 
 const app = express();
 mongoose.connect(`mongodb://localhost/ApiNodeTcc`)
+
+app.use(cors())
 
 app.use(express.json());
 
