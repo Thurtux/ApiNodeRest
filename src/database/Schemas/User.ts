@@ -18,6 +18,9 @@ const User = new mongoose.Schema({
         required: true,
         select: false,
     },
+    access_token: {
+        type: String,
+    },
     createdAt: {
         type: Date,
         default: Date.now
