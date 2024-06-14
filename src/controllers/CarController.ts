@@ -54,27 +54,39 @@ class CarController {
     }
 
     async delete(request: Request, response: Response) {
-        const { id } = request.body;
+        const id = request.params.id; // Correção aqui: use `id` ao invés de `request.params._id`
         try {
-            const cars = await Car.findById(id);
-            if (!cars) {
+            const car = await Car.findById(id); // Use `findById` para encontrar pelo ID
+    
+            console.log(car);
+    
+            if (!car) {
                 return response.status(400).json({
                     error: "Car does not exist"
                 });
             }
     
-            await Car.deleteOne({ id }); 
+            await Car.findByIdAndDelete(id); // Use `findByIdAndDelete` para deletar pelo ID
     
             return response.json({
                 message: "Car deleted successfully"
             });
         } catch (error) {
-            return response.status(500).json({
-                error: "Deletion error",
-                message: error
-            });
+            if (error instanceof Error) {
+                return response.status(500).json({
+                    error: "Deletion error",
+                    message: error.message // Adicione `.message` para uma mensagem de erro mais clara
+                });
+            } else {
+                return response.status(500).json({
+                    error: "Deletion error",
+                    message: "An unknown error occurred" // Mensagem de fallback para erros desconhecidos
+                });
+            }
         }
     }
+    
+    
 
 
     async update(request: Request, response: Response) {
