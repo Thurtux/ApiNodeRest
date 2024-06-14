@@ -18,6 +18,27 @@ const User = new mongoose.Schema({
         required: true,
         select: false,
     },
+    cpf: {
+        type: String,
+        require: true,
+        unique: true
+    },
+    logradouro: {
+        type: String,
+        require: true
+    },
+    bairro: {
+        type: String,
+        require: true
+    },
+    localidade: {
+        type: String,
+        require: true
+    },
+    uf: {
+        type: String,
+        require: true
+    },
     access_token: {
         type: String,
     },
