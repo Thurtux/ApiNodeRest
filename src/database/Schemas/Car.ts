@@ -28,6 +28,22 @@ const Car = new mongoose.Schema({
         type: String,
         require: true,
     },
+    quilometragem: {
+        type: String,
+        require: true
+    },
+    cambio: {
+        type: String,
+        require: true
+    },
+    motor: {
+        type: String,
+        require: true
+    },
+    flex: {
+        type: Boolean,
+        require: true
+    },
     description: {
         type: String,
         require: true,
