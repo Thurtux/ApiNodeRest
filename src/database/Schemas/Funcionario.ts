@@ -28,4 +28,4 @@ const funcionario = new mongoose.Schema({
 
 
 
-export default mongoose.model("User", funcionario);
+export default mongoose.model("Funcionario", funcionario);
