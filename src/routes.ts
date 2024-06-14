@@ -19,7 +19,7 @@ routes.post("/login", UserController.login);
 routes.delete("/car/:id", CarController.delete);
 routes.get("/cars", CarController.find);
 routes.post("/car", CarController.create);
-routes.put("/car", CarController.update);
+routes.put("/car/:id", CarController.update);
 
 export default routes;
 

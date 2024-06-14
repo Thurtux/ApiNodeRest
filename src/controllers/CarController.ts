@@ -86,34 +86,39 @@ class CarController {
         }
     }
     
+async  update(request: Request, response: Response) {
+    const { id } = request.params; // Obtém o id dos parâmetros da URL
+    const { mark, model, plate, releaseDate, price, color, description, image } = request.body;
     
+    try {
+        const car = await Car.findById(id);
 
-
-    async update(request: Request, response: Response) {
-        const { id, mark, model, plate, releaseDate, price, color, description, image} = request.body;
-        try {
-            const cars = await Car.findById(id);
-            if (cars!) {
-                return response.status(400).json({
-                    error: "Car does not exist"
-                });
-            }
-    
-            await Car.updateMany({mark, model, plate, releaseDate, price, color, description, image}); 
-    
-            return response.json({
-                message: "Car update successfully"
+        if (!car) {
+            return response.status(400).json({
+                error: "Car does not exist"
             });
-        } catch (error) {
+        }
+
+        await Car.findByIdAndUpdate(id, { mark, model, plate, releaseDate, price, color, description, image }, { new: true });
+
+        return response.json({
+            message: "Car updated successfully"
+        });
+    } catch (error: unknown) {
+        if (error instanceof Error) {
             return response.status(500).json({
                 error: "update error",
-                message: error
+                message: error.message // Use error.message para uma mensagem de erro mais clara
+            });
+        } else {
+            return response.status(500).json({
+                error: "update error",
+                message: "An unknown error occurred"
             });
         }
     }
-    
+}   
     
 }
-
 
 export default new CarController();
