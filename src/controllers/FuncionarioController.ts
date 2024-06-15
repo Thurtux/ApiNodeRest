@@ -66,6 +66,38 @@ class FuncionarioController {
           });
         }
       }
+      
+      async update(request: Request, response: Response) {
+        const { id } = request.params;
+        const { name, email, cargo, cpf, salario, dataAdmissao } = request.body;
+      
+        try {
+          const funcionario = await Funcionario.findById(id);
+      
+          if (!funcionario) {
+            return response.status(404).json({
+              error: "Not Found",
+              message: "User not found",
+            });
+          }
+      
+          if (name) funcionario.name = name;
+          if (email) funcionario.email = email;
+          if (cargo) funcionario.cargo = cargo; 
+          if (salario) funcionario.salario = salario;
+          if (dataAdmissao) funcionario.dataAdmissao = dataAdmissao;
+    
+      
+          await funcionario.save();
+      
+          return response.json(funcionario);
+        } catch (error: any) {
+          return response.status(500).send({
+            error: "Nao foi possivel atualizar usuario",
+            message: error.message,
+          });
+        }
+      }
 }
 
 export default new FuncionarioController();
