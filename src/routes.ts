@@ -28,6 +28,7 @@ routes.put("/car/:id", CarController.update);
 routes.post("/func", FuncionarioController.create);
 routes.get("/funcs", FuncionarioController.find);
 routes.delete("/func", FuncionarioController.delete);
+routes.put("/func/:id", FuncionarioController.update);
 
 export default routes;
 
