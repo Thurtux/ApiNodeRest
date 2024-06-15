@@ -144,7 +144,7 @@ class UserController {
         });
       }
 
-      // Generate a JWT token
+      
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET!, {
         expiresIn: process.env.JWT_EXPIRES_IN,
       });
@@ -158,10 +158,10 @@ class UserController {
         _id: user._id
       });
     } catch (error: any) {
-      console.error("Login error:", error); // Adicione este log para depuração
+      console.error("Login error:", error); 
       return response.status(500).json({
         error: "Nao foi possivel fazer login",
-        message: error.message, // Use error.message para mostrar a mensagem de erro
+        message: error.message, 
       });
     }
   }

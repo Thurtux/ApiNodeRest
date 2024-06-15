@@ -10,7 +10,6 @@ routes.use(cors());
 
 //users routes
 routes.get("/users", UserController.find);
-
 routes.delete("/user/:id", UserController.delete);
 routes.post("/user", UserController.create);
 routes.put("/user/:id", UserController.update);
