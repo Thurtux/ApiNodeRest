@@ -79,39 +79,37 @@ class UserController {
     }
   }
 
-  async  update(request: Request, response: Response) {
-    const { id } = request.params; // Obtém o id dos parâmetros da URL
+  async update(request: Request, response: Response) {
+    const { id } = request.params;
     const { name, email, password, cpf, logradouro, bairro, localidade, uf } = request.body;
-    
+  
     try {
-        const user = await User.findById(id);
-
-        if (!user) {
-            return response.status(400).json({
-                error: "User does not exist"
-            });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-        console.log(hashedPassword)
-
-        await User.findByIdAndUpdate(id, { name, email, password: hashedPassword, cpf, logradouro, bairro, localidade, uf }, { new: true });
-
-        return response.json({
-            message: "User updated successfully"
+      const user = await User.findById(id);
+  
+      if (!user) {
+        return response.status(404).json({
+          error: "Not Found",
+          message: "User not found",
         });
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            return response.status(500).json({
-                error: "update error",
-                message: error.message 
-            });
-        } else {
-            return response.status(500).json({
-                error: "update error",
-                message: "An unknown error occurred"
-            });
-        }
+      }
+  
+      if (name) user.name = name;
+      if (email) user.email = email;
+      if (password) user.password = await bcrypt.hash(password, 10); // Hash da nova senha
+      if (cpf) user.cpf = cpf;
+      if (logradouro) user.logradouro = logradouro;
+      if (bairro) user.bairro = bairro;
+      if (localidade) user.localidade = localidade;
+      if (uf) user.uf = uf;
+  
+      await user.save();
+  
+      return response.json(user);
+    } catch (error: any) {
+      return response.status(500).send({
+        error: "Nao foi possivel atualizar usuario",
+        message: error.message,
+      });
     }
 } 
   
