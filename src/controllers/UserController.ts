@@ -86,15 +86,16 @@ class UserController {
     try {
         const user = await User.findById(id);
 
-        console.log(user)
-
         if (!user) {
             return response.status(400).json({
                 error: "User does not exist"
             });
         }
 
-        await User.findByIdAndUpdate(id, { name, email, password, cpf, logradouro, bairro, localidade, uf }, { new: true });
+        const hashedPassword = await bcrypt.hash(password, 10);
+        console.log(hashedPassword)
+
+        await User.findByIdAndUpdate(id, { name, email, password: hashedPassword, cpf, logradouro, bairro, localidade, uf }, { new: true });
 
         return response.json({
             message: "User updated successfully"
