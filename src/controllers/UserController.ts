@@ -95,7 +95,7 @@ class UserController {
   
       if (name) user.name = name;
       if (email) user.email = email;
-      if (password) user.password = await bcrypt.hash(password, 10); // Hash da nova senha
+      if (password) user.password = password 
       if (cpf) user.cpf = cpf;
       if (logradouro) user.logradouro = logradouro;
       if (bairro) user.bairro = bairro;
