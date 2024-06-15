@@ -1,8 +1,8 @@
 import cors from 'cors';
 import { Router } from "express";
 import CarController from "./controllers/CarController";
-import UserController from "./controllers/UserController";
 import FuncionarioController from './controllers/FuncionarioController';
+import UserController from "./controllers/UserController";
 
 
 const routes = Router();
@@ -13,6 +13,7 @@ routes.get("/users", UserController.find);
 
 routes.delete("/user/:id", UserController.delete);
 routes.post("/user", UserController.create);
+routes.put("/user/:id", UserController.update);
 routes.post("/login", UserController.login);
 
 

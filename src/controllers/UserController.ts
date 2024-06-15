@@ -78,6 +78,41 @@ class UserController {
       });
     }
   }
+
+  async  update(request: Request, response: Response) {
+    const { id } = request.params; // Obtém o id dos parâmetros da URL
+    const { name, email, password, cpf, logradouro, bairro, localidade, uf } = request.body;
+    
+    try {
+        const user = await User.findById(id);
+
+        console.log(user)
+
+        if (!user) {
+            return response.status(400).json({
+                error: "User does not exist"
+            });
+        }
+
+        await User.findByIdAndUpdate(id, { name, email, password, cpf, logradouro, bairro, localidade, uf }, { new: true });
+
+        return response.json({
+            message: "User updated successfully"
+        });
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            return response.status(500).json({
+                error: "update error",
+                message: error.message 
+            });
+        } else {
+            return response.status(500).json({
+                error: "update error",
+                message: "An unknown error occurred"
+            });
+        }
+    }
+} 
   
 
   async login(request: Request, response: Response) {
