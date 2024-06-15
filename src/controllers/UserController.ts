@@ -20,7 +20,7 @@ class UserController {
   }
 
   async create(request: Request, response: Response) {
-    const { name, email, password } = request.body;
+    const { name, email, password, cpf, logradouro, bairro, localidade, uf } = request.body;
 
     try {
       const userExists = await User.findOne({ email });
@@ -35,7 +35,12 @@ class UserController {
       const user = await User.create({
         name,
         email,
-        password, // Salvar a senha hashada
+        password,
+        cpf,
+        logradouro, 
+        bairro,
+        localidade,
+        uf // Salvar a senha hashada
       });
 
       return response.json(user);
@@ -48,16 +53,20 @@ class UserController {
   }
 
   async delete(request: Request, response: Response) {
-    const id = request.params._id;
+    const id = request.params.id;
     try {
-      const user = await User.findOne({id});
+      const user = await User.findById(id);
+  
+      console.log(user)
+      console.log(id)
+
       if (!user) {
         return response.status(400).json({
           error: "User does not exist",
         });
       } else {
-        await User.deleteOne({ id });
-
+        await User.findByIdAndDelete(id);
+  
         return response.json({
           message: "User deleted successfully",
         });
@@ -65,10 +74,11 @@ class UserController {
     } catch (error: any) {
       return response.status(500).json({
         error: "Deletion error",
-        message: error.message, // Use error.message para mostrar a mensagem de erro
+        message: error.message, 
       });
     }
   }
+  
 
   async login(request: Request, response: Response) {
     const { _id, email, password } = request.body;
