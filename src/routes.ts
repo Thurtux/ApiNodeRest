@@ -3,7 +3,7 @@ import { Router } from "express";
 import CarController from "./controllers/CarController";
 import FuncionarioController from './controllers/FuncionarioController';
 import UserController from "./controllers/UserController";
-
+import ReservaController from './controllers/ReservaController';
 
 const routes = Router();
 routes.use(cors());
@@ -28,6 +28,13 @@ routes.post("/func", FuncionarioController.create);
 routes.get("/funcs", FuncionarioController.find);
 routes.delete("/func", FuncionarioController.delete);
 routes.put("/func/:id", FuncionarioController.update);
+
+
+//reserva routes
+routes.post('/reserva/:userid/:carid', ReservaController.create);
+routes.get('/reservas', ReservaController.find);
+routes.delete('/reserva/:id', ReservaController.delete);
+routes.put('/reserva/:id', ReservaController.delete);
 
 export default routes;
 
