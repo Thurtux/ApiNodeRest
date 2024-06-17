@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Funcionario from '../database/Schemas/Funcionario'
+import Funcionario from '../database/Schemas/Funcionario';
 
 class FuncionarioController {
 
@@ -33,15 +33,18 @@ class FuncionarioController {
       } 
 
       async delete(request: Request, response: Response) {
-        const id = request.params._id;
+        const id = request.params.id;
         try {
           const funcionario = await Funcionario.findById(id);
+
+          console.log(funcionario)
+
           if (!funcionario) {
             return response.status(400).json({
               error: "Funcionário não encontrado",
             });
           } else {
-            await Funcionario.deleteOne({ id });
+            await Funcionario.findByIdAndDelete( id );
       
             return response.json({
               message: "Funcionário deletado com sucesso",

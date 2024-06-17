@@ -2,8 +2,8 @@ import cors from 'cors';
 import { Router } from "express";
 import CarController from "./controllers/CarController";
 import FuncionarioController from './controllers/FuncionarioController';
-import UserController from "./controllers/UserController";
 import ReservaController from './controllers/ReservaController';
+import UserController from "./controllers/UserController";
 
 const routes = Router();
 routes.use(cors());
@@ -26,7 +26,7 @@ routes.put("/car/:id", CarController.update);
 //funcionario routes
 routes.post("/func", FuncionarioController.create);
 routes.get("/funcs", FuncionarioController.find);
-routes.delete("/func", FuncionarioController.delete);
+routes.delete("/func/:id", FuncionarioController.delete);
 routes.put("/func/:id", FuncionarioController.update);
 
 
