@@ -39,6 +39,22 @@ const User = new mongoose.Schema({
         type: String,
         require: true
     },
+    cep: {
+        type: String,
+        require: true
+    },
+    telefone: {
+        type: String,
+        require: true
+    },
+    data_nascimento: {
+        type: String,
+        require: true
+    },
+    num: {
+        type: String,
+        require: true
+    },
     access_token: {
         type: String,
     },
