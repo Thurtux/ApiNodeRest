@@ -20,7 +20,7 @@ class UserController {
   }
 
   async create(request: Request, response: Response) {
-    const { name, email, password, cpf, logradouro, bairro, localidade, uf } = request.body;
+    const { name, email, password, cpf, logradouro, bairro, localidade, uf, cep, telefone, data_nascimento, num } = request.body;
 
     try {
       const userExists = await User.findOne({ email });
@@ -35,12 +35,16 @@ class UserController {
       const user = await User.create({
         name,
         email,
-        password,
+        password,// Salvar a senha hashada
         cpf,
         logradouro, 
         bairro,
         localidade,
-        uf // Salvar a senha hashada
+        uf,
+        cep,
+        telefone,
+        data_nascimento,
+        num
       });
 
       return response.json(user);
@@ -81,7 +85,7 @@ class UserController {
 
   async update(request: Request, response: Response) {
     const { id } = request.params;
-    const { name, email, password, cpf, logradouro, bairro, localidade, uf } = request.body;
+    const { name, email, password, cpf, logradouro, bairro, localidade, uf, cep, telefone, data_nascimento, num } = request.body;
   
     try {
       const user = await User.findById(id);
@@ -101,6 +105,11 @@ class UserController {
       if (bairro) user.bairro = bairro;
       if (localidade) user.localidade = localidade;
       if (uf) user.uf = uf;
+      if (cep) user.cep = cep;
+      if (telefone) user.telefone = telefone;
+      if (data_nascimento) user.data_nascimento = data_nascimento;
+      if (num) user.num = num;
+
   
       await user.save();
   
