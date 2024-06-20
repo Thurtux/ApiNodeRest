@@ -20,7 +20,20 @@ class UserController {
   }
 
   async create(request: Request, response: Response) {
-    const { name, email, password, cpf, logradouro, bairro, localidade, uf, cep, telefone, data_nascimento, num } = request.body;
+    const {
+      name,
+      email,
+      password,
+      cpf,
+      logradouro,
+      bairro,
+      localidade,
+      uf,
+      cep,
+      telefone,
+      data_nascimento,
+      num,
+    } = request.body;
 
     try {
       const userExists = await User.findOne({ email });
@@ -35,16 +48,16 @@ class UserController {
       const user = await User.create({
         name,
         email,
-        password,// Salvar a senha hashada
+        password, // Salvar a senha hashada
         cpf,
-        logradouro, 
+        logradouro,
         bairro,
         localidade,
         uf,
         cep,
         telefone,
         data_nascimento,
-        num
+        num,
       });
 
       return response.json(user);
@@ -60,9 +73,9 @@ class UserController {
     const id = request.params.id;
     try {
       const user = await User.findById(id);
-  
-      console.log(user)
-      console.log(id)
+
+      console.log(user);
+      console.log(id);
 
       if (!user) {
         return response.status(400).json({
@@ -70,7 +83,7 @@ class UserController {
         });
       } else {
         await User.findByIdAndDelete(id);
-  
+
         return response.json({
           message: "User deleted successfully",
         });
@@ -78,41 +91,53 @@ class UserController {
     } catch (error: any) {
       return response.status(500).json({
         error: "Deletion error",
-        message: error.message, 
+        message: error.message,
       });
     }
   }
 
   async update(request: Request, response: Response) {
     const { id } = request.params;
-    const { name, email, password, cpf, logradouro, bairro, localidade, uf, cep, telefone, data_nascimento, num } = request.body;
-  
+    const {
+      name,
+      email,
+      password,
+      cpf,
+      logradouro,
+      bairro,
+      localidade,
+      uf,
+      cep,
+      telefone,
+      data_nascimento,
+      num,
+    } = request.body;
+
     try {
       const user = await User.findById(id);
-  
+
       if (!user) {
         return response.status(404).json({
           error: "Not Found",
           message: "User not found",
         });
       }
-  
+
       if (name) user.name = name;
       if (email) user.email = email;
-      if (password) user.password = password 
+      if (password) user.password = password;
       if (cpf) user.cpf = cpf;
       if (logradouro) user.logradouro = logradouro;
       if (bairro) user.bairro = bairro;
       if (localidade) user.localidade = localidade;
       if (uf) user.uf = uf;
-      if (cep) user.cep = cep;
-      if (telefone) user.telefone = telefone;
-      if (data_nascimento) user.data_nascimento = data_nascimento;
-      if (num) user.num = num;
+      // if (cep) user.cep = cep;
+      // if (telefone) user.telefone = telefone;
+      // if (data_nascimento) user.data_nascimento = data_nascimento;
+      // if (num) user.num = num;
 
-  
       await user.save();
-  
+
       return response.json(user);
     } catch (error: any) {
       return response.status(500).send({
@@ -120,57 +145,60 @@ class UserController {
         message: error.message,
       });
     }
-} 
-  
+  }
 
   async login(request: Request, response: Response) {
-    const { _id, email, password } = request.body;
-
+    const { email, password } = request.body;
+  
     try {
-      const user = await User.findOne({ email });
-      console.log(user);
+      console.log("Login request received for email:", email);
 
+      const user = await User.findOne({email})
+  
       if (!user) {
+        console.log("User not found:", email);
         return response.status(400).json({
           error: "oops",
           message: "User does not exist",
         });
       }
-
-      const isMatch = await bcrypt.compare(password, user.password);
-      const match = bcrypt.compareSync(password, user.password)
-       
-      console.log(match)
-      console.log(password);
-      console.log(user.password);
-      console.log(isMatch);
-
-      if (!isMatch) {
+  
+      const passwordMatch = await bcrypt.compare(password, user.password);
+  
+      if (!passwordMatch) {
+        console.log("Password does not match for user:", email);
         return response.status(400).json({
           error: "oops",
           message: "Incorrect password",
-          
         });
       }
 
-      
-      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET!, {
+      // // Verifique se as variáveis de ambiente estão definidas (opcional, dependendo da sua estratégia)
+      // if (!process.env.JWT_SECRET) {
+      //   throw new Error("JWT_SECRET is not defined in environment variables");
+      // }
+  
+      // Gerar um token JWT
+      const token = jwt.sign({ userId: email }, process.env.JWT_SECRET!, {
         expiresIn: process.env.JWT_EXPIRES_IN,
       });
 
-      console.log("User password:", user.password);
+      console.log('Segredo', process.env.JWT_SECRET)
+  
+      console.log("User password (hashed):", user.password);
       console.log("Input password:", password);
-
+      console.log("Password match:", passwordMatch);
+      console.log("Generated token:", token);
+  
       return response.json({
         message: "Login successful",
         token,
-        _id: user._id
       });
     } catch (error: any) {
-      console.error("Login error:", error); 
+      console.error("Login error:", error);
       return response.status(500).json({
-        error: "Nao foi possivel fazer login",
-        message: error.message, 
+        error: "Não foi possível fazer login",
+        message: error.message,
       });
     }
   }
