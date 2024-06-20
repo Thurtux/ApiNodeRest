@@ -48,7 +48,7 @@ const User = new mongoose.Schema({
         require: true
     },
     data_nascimento: {
-        type: String,
+        type: Date,
         require: true
     },
     num: {
