@@ -148,7 +148,7 @@ class UserController {
   }
 
   async login(request: Request, response: Response) {
-    const { email, password } = request.body;
+    const { _id, email, password } = request.body;
   
     try {
       console.log("Login request received for email:", email);
@@ -173,15 +173,17 @@ class UserController {
         });
       }
 
-      // // Verifique se as variáveis de ambiente estão definidas (opcional, dependendo da sua estratégia)
-      // if (!process.env.JWT_SECRET) {
-      //   throw new Error("JWT_SECRET is not defined in environment variables");
-      // }
+      // Verifique se as variáveis de ambiente estão definidas (opcional, dependendo da sua estratégia)
+      
   
       // Gerar um token JWT
-      const token = jwt.sign({ userId: email }, process.env.JWT_SECRET!, {
+      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET!, {
         expiresIn: process.env.JWT_EXPIRES_IN,
       });
+
+      if (!process.env.JWT_SECRET) {
+        throw new Error("JWT_SECRET is not defined in environment variables");
+      }
 
       console.log('Segredo', process.env.JWT_SECRET)
   
@@ -193,6 +195,7 @@ class UserController {
       return response.json({
         message: "Login successful",
         token,
+        _id: user._id
       });
     } catch (error: any) {
       console.error("Login error:", error);
