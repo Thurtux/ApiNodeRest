@@ -20,7 +20,7 @@ class CarController {
 
 
     async create(request: Request, response:Response) {
-            const {mark, model, plate, releaseDate, price, color, description, image} = request.body;
+            const {mark, model, plate, releaseDate, price, color, description, image, quilometragem, cambio, motor, flex} = request.body;
         try {
             const CarsExist = await Car.findOne({ plate });
 
@@ -39,11 +39,14 @@ class CarController {
                 price,
                 color,
                 description,
+                quilometragem,
+                cambio,
+                motor,
+                flex,
                 image
             });
             return response.json(user);
 
-    
         }
          catch (error) {
             return response.status(500).send({
@@ -86,9 +89,9 @@ class CarController {
         }
     }
     
-async  update(request: Request, response: Response) {
+    async  update(request: Request, response: Response) {
     const { id } = request.params; // Obtém o id dos parâmetros da URL
-    const { mark, model, plate, releaseDate, price, color, description, image } = request.body;
+    const { mark, model, plate, releaseDate, price, color, description, image, quilometragem, cambio,  motor, flex} = request.body;
     
     try {
         const car = await Car.findById(id);
@@ -99,7 +102,7 @@ async  update(request: Request, response: Response) {
             });
         }
 
-        await Car.findByIdAndUpdate(id, { mark, model, plate, releaseDate, price, color, description, image }, { new: true });
+        await Car.findByIdAndUpdate(id, { mark, model, plate, releaseDate, price, color, description, image, quilometragem, cambio, motor, flex}, { new: true });
 
         return response.json({
             message: "Car updated successfully"
